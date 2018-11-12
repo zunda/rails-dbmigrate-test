@@ -7,6 +7,9 @@
       "plan": "heroku-postgresql",
     }
   ],
+  "scripts": {
+    "postdeploy": "bin/rails db:migrate"
+  },
   "buildpacks": [
     {
       "url": "heroku/ruby"
