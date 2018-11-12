@@ -1,0 +1,15 @@
+{
+  "name": "A sample minimal blog app",
+  "description": "A minimal blog app built on Ruby on Rails to demonstrate database migrations on Heroku",
+  "repository": "https://github.com/zunda/rails-dbmigrate-test",
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}
