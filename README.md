@@ -1,24 +1,11 @@
-# README
+# A sample minimal blog app
+This is a minimal blog app built on Ruby on Rails following https://guides.rubyonrails.org/getting_started.html to demonstrate database migrations on Heroku.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Running locally
 
-Things you may want to cover:
+## Deploy to Heroku
 
-* Ruby version
+## License
+This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+"Rails", "Ruby on Rails", and the Rails logo are trademarks of David Heinemeier Hansson. All rights reserved.
