@@ -2,6 +2,15 @@
 This is a minimal blog app built on Ruby on Rails following https://guides.rubyonrails.org/getting_started.html to demonstrate database migrations on Heroku.
 
 ## Running locally
+Run the following:
+
+```
+$ bundle install --path=vendor/bundle
+$ bin/rails db:migrate
+$ bin/rails server
+```
+
+and navigate to http://localhost:3000/
 
 ## Deploy to Heroku
 
