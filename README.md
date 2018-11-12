@@ -2,11 +2,16 @@
 This is a minimal blog app built on Ruby on Rails following https://guides.rubyonrails.org/getting_started.html to demonstrate database migrations on Heroku.
 
 ## Running locally
-Run the following:
+Run a PostgreSQL server locally and execute the following:
 
 ```
 $ bundle install --path=vendor/bundle
-$ bin/rails db:migrate
+$ bin/rails db:setup
+```
+
+Run the following to start the server
+
+```
 $ bin/rails server
 ```
 
