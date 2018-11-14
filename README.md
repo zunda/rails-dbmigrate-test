@@ -23,6 +23,7 @@ Click the Heroku button:
 
 ## Different paths to rename the column
 ### Use rename_column
+#### Locally
 
 ```
 $ git checkout minimal-blog
@@ -64,6 +65,57 @@ rails-dbmigrate-test_development=# \d articles
 Indexes:
     "articles_pkey" PRIMARY KEY, btree (id)
 ```
+
+#### On Heroku
+```
+$ heroku apps:create
+$ heroku buildpacks:set heroku/ruby
+$ git checkout minimal-blog
+$ git push heroku minimal-blog:master
+$ heroku run bin/rails db:migrate
+$ heroku open
+```
+
+Post some articles.
+
+```
+$ git checkout rename-column
+$ git push -f heroku rename-column:master
+```
+
+Code is on newer version. Postgres is on older scheme.
+
+Reload the page that shows articles. That will result with an error page.
+
+```
+$ heroku logs -t
+  :
+app[web.1]: ActionView::Template::Error (undefined method `body' for #<Article:0x000055fbbccaa7c0>):
+app[web.1]:     10:   <% @articles.each do |article| %>
+app[web.1]:     11:     <tr>
+app[web.1]:     12:       <td><%= article.title %></td>
+app[web.1]:     13:       <td><%= article.body %></td>
+app[web.1]:     14:       <td><%= link_to 'Show', article_path(article) %></td>
+app[web.1]:     15:       <td><%= link_to 'Edit', edit_article_path(article) %></td>
+app[web.1]:     16:       <td><%= link_to 'Destroy', article_path(article),
+app[web.1]:
+app[web.1]: app/views/articles/index.html.erb:13:in `block in _app_views_articles_index_html_erb___3253650643868770937_47269849744480'
+app[web.1]: app/views/articles/index.html.erb:10:in `_app_views_articles_index_html_erb___3253650643868770937_47269849744480'
+  :
+```
+
+Migrating the database fixes the problem after the down time.
+
+```
+$ heroku run bin/rails db:migrate
+Running bin/rails db:migrate on ⬢ fast-woodland-11010... up, run.9450 (Free)
+== 20181113004745 RenameTextToBody: migrating =================================
+-- rename_column(:articles, :text, :body)
+   -> 0.0069s
+== 20181113004745 RenameTextToBody: migrated (0.0070s) ========================
+```
+
+Reload the page. `Text` is now shown as `Body`.
 
 ## License
 This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
