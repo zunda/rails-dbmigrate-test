@@ -117,6 +117,44 @@ Running bin/rails db:migrate on ⬢ fast-woodland-11010... up, run.9450 (Free)
 
 Reload the page. `Text` is now shown as `Body`.
 
+#### On Heroku, with Release Phase command
+```
+$ heroku apps:create
+$ heroku buildpacks:set heroku/ruby
+$ git checkout minimal-blog
+$ git push heroku minimal-blog:master
+$ heroku run bin/rails db:migrate
+$ heroku open
+```
+
+Post some articles.
+
+```
+$ git checkout rename-column-release-phase
+$ git push -f heroku rename-column-release-phase:master
+```
+
+The Release Phase command has a 60-second sleep to make the versin mismatch more visible. Reload the page after the Reload Phase command completed database migration but before dynos are restarted for the release.
+
+```
+$ heroku logs -t
+  :
+2018-11-15T01:07:15.651153+00:00 heroku[release.1058]: Starting process with command `if curl https://heroku-release-output.s3.amazonaws.com/log-stream?... --silent --connect-timeout 10 --retry 3 --retry-delay 1 >/tmp/log-stream; then   chmod u+x /tmp/log-stream   /tmp/log-stream /bin/sh -c 'bin/rails db:migrate; sleep 60' else   bin/rails db:migrate; sleep 60 fi`
+2018-11-15T01:07:16.293342+00:00 heroku[release.1058]: State changed from starting to up
+  :
+ActionView::Template::Error (missing attribute: text):
+    10:   <% @articles.each do |article| %>
+    11:     <tr>
+    12:       <td><%= article.title %></td>
+    13:       <td><%= article.text %></td>
+    14:       <td><%= link_to 'Show', article_path(article) %></td>
+    15:       <td><%= link_to 'Edit', edit_article_path(article) %></td>
+    16:       <td><%= link_to 'Destroy', article_path(article),
+```
+
+When the dyno has restarted, the page will show fine again.
+
+
 ## License
 This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
 
