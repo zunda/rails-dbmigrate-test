@@ -1,12 +1,14 @@
 class AddBodyToArticles < ActiveRecord::Migration[5.2]
   def up
     add_column :articles, :body, :text
-		execute <<_ADD_TRIGGER
+    execute <<_ADD_TRIGGER
 UPDATE articles SET body = text;
 CREATE OR REPLACE FUNCTION sync_to_body()
-	RETURNS TRIGGER AS $$
+  RETURNS TRIGGER AS $$
   BEGIN
-    NEW.body := NEW.text;
+    IF NEW.body IS NULL THEN
+      NEW.body := NEW.text;
+    END IF;
     RETURN NEW;
   END;
   $$ LANGUAGE plpgsql;
