@@ -190,7 +190,23 @@ $ git reset --hard
 $ bin/rails server
 ```
 
-Now, only the `body` column is taken care of.
+Now, only the `body` column is referred to.
+
+Finally, drop the `text` column:
+
+```
+$ git checkout add-and-delete-column-3
+$ git reset --hard
+$ bin/rails db:migrate
+== 20181116211017 DropTextFromArticles: migrating =============================
+-- execute("DROP TRIGGER sync_to_body_trigger ON articles;\nDROP FUNCTION sync_to_body();\n")
+   -> 0.0014s
+-- remove_column(:articles, :text)
+   -> 0.0016s
+== 20181116211017 DropTextFromArticles: migrated (0.0034s) ====================
+
+$ bin/rails server
+```
 
 ## License
 This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
