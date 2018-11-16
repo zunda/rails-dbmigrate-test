@@ -163,21 +163,12 @@ $ git checkout minimal-blog
 $ git reset --hard
 $ bin/rails db:drop
 $ bin/rails db:setup
-$ psql rails-dbmigrate-test_development
-rails-dbmigrate-test_development=# \d articles
-                                        Table "public.articles"
-   Column   |            Type             | Collation | Nullable |               Default                
-------------+-----------------------------+-----------+----------+--------------------------------------
- id         | bigint                      |           | not null | nextval('articles_id_seq'::regclass)
- title      | character varying           |           |          | 
- text       | text                        |           |          | 
- created_at | timestamp without time zone |           | not null | 
- updated_at | timestamp without time zone |           | not null | 
-Indexes:
-    "articles_pkey" PRIMARY KEY, btree (id)
+$ bin/rails server
 ```
 
-Add the `body` column.
+Create some articles.
+
+Add the `body` column:
 
 ```
 $ git checkout add-and-delete-column-1
@@ -185,11 +176,21 @@ $ git reset --hard
 $ bin/rails db:migrate
 == 20181115023021 AddBodyToArticles: migrating ================================
 -- add_column(:articles, :body, :text)
-   -> 0.0017s
--- execute("UPDATE articles SET body = text;\nCREATE OR REPLACE FUNCTION sync_to_body()\n\tRETURNS TRIGGER AS $$\n  BEGIN\n    NEW.body := NEW.text;\n    RETURN NEW;\n  END;\n  $$ LANGUAGE plpgsql;\n\nCREATE TRIGGER sync_to_body_trigger\n  AFTER INSERT OR UPDATE OF text ON articles\n  FOR EACH ROW EXECUTE PROCEDURE sync_to_body();\n")
-   -> 0.1101s
-== 20181115023021 AddBodyToArticles: migrated (0.1124s) =======================
+   -> 0.0018s
+-- execute("UPDATE articles SET body = text;\nCREATE OR REPLACE FUNCTION sync_to_body()\n  RETURNS TRIGGER AS $$\n  BEGIN\n    IF NEW.body IS NULL THEN\n      NEW.body := NEW.text;\n    END IF;\n    RETURN NEW;\n  END;\n  $$ LANGUAGE plpgsql;\n\nCREATE TRIGGER sync_to_body_trigger\n  BEFORE INSERT OR UPDATE OF text ON articles\n  FOR EACH ROW EXECUTE PROCEDURE sync_to_body();\n")
+   -> 0.0233s
+== 20181115023021 AddBodyToArticles: migrated (0.0254s) =======================
 ```
+
+Stop the rails server and change the code to refer to `body` column:
+
+```
+$ git checkout add-and-delete-column-2
+$ git reset --hard
+$ bin/rails server
+```
+
+Now, only the `body` column is taken care of.
 
 ## License
 This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
