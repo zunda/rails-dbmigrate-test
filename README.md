@@ -208,6 +208,51 @@ $ bin/rails db:migrate
 $ bin/rails server
 ```
 
+### On Heroku
+
+```
+$ heroku apps:create
+$ heroku buildpacks:set heroku/ruby
+$ git checkout minimal-blog
+$ git push heroku minimal-blog:master
+$ heroku run bin/rails db:migrate
+$ heroku open
+```
+
+Post some articles.
+
+Start renaming the column. First, push the migration to add the column.
+
+```
+$ git checkout add-and-delete-column-1
+$ git push -f heroku add-and-delete-column-1:master
+```
+
+Post and/or edit some articles. Then, migrate the database.
+
+```
+$ heroku run bin/rails db:migrate
+```
+
+Post and/or edit some articles. Change the code to use the new column.
+
+```
+$ git checkout add-and-delete-column-2
+$ git push -f heroku add-and-delete-column-2:master
+```
+
+Wait for the dyno to restart.
+Now the pages show Body instead of Text.
+Post and/or edit some articles.
+
+Finally, remove the old column.
+
+```
+$ git checkout add-and-delete-column-3
+$ git push -f heroku add-and-delete-column-3:master
+$ heroku run bin/rails db:migrate
+```
+
 ## License
 This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a> License based upon the work posted at https://guides.rubyonrails.org/getting_started.html .
 
