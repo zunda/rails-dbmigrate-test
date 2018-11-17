@@ -6,7 +6,7 @@ UPDATE articles SET body = text;
 CREATE OR REPLACE FUNCTION sync_to_body()
   RETURNS TRIGGER AS $$
   BEGIN
-    IF NEW.body IS NULL THEN
+    IF ( TG_OP = 'UPDATE' AND NEW.text != OLD.text OR NEW.body IS NULL ) THEN
       NEW.body := NEW.text;
     END IF;
     RETURN NEW;
