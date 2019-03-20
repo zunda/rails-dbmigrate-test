@@ -1,6 +1,8 @@
 # A sample minimal blog app
 This is a minimal blog app built on Ruby on Rails following https://guides.rubyonrails.org/getting_started.html to demonstrate database migrations on Heroku.
 
+Note: Some Ruby Gems used in this project have known vulnerabilities but intentionally left as they are to preserve commit graph in the repository. Make sure to update gems if you're using this repository for your project.
+
 ## Running locally
 Run a PostgreSQL server locally and execute the following:
 
@@ -16,10 +18,6 @@ $ bin/rails server
 ```
 
 and navigate to http://localhost:3000/
-
-## Deploy to Heroku
-Click the Heroku button:
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Different paths to rename the column
 ### Use rename_column
